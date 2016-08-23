@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        #container {
+            position:absolute;
+            left:0px;
+            top:0px;
+            width:100%;
+            height:100%;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+    <script src="js/three.min.js"></script>
+</head>
+<body>
+<script>
+    var renderer = new THREE.WebGLRenderer({antialias: true});
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    renderer.setSize(width, height);
+    document.body.appendChild(renderer.domElement);
+    renderer.setClearColor(0xEEEEEE);
+    var fov = 45;
+    var aspect = width / height;
+    var near = 1;
+    var far = 10000;
+    var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
+    camera.position.z = 300;
+    var scene = new THREE.Scene();
+    var cube = new THREE.Mesh(
+            new THREE.BoxGeometry(50,50,50,3,3,3),
+            new THREE.MeshNormalMaterial({color: 0xffffff, opacity: 1})
+    );
+    scene.add(cube);
+    scene.add(camera);
+
+    renderer.render(scene, camera);
+    var paused = false;
+    //new add
+    function animate(t) {
+        if (!paused) {
+            camera.position.set(
+                    Math.sin(t/1000)*300, 150, Math.cos(t/1000)*300);
+            renderer.clear();
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
+        }
+        window.requestAnimationFrame(animate, renderer.domElement);
+    };
+    animate(new Date().getTime());
+</script>
+</body>
+</html>

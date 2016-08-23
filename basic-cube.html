@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>cube</title>
+    <style>
+        body{
+            background-color: #333;
+            overflow: hidden;
+        }
+    </style>
+    <script src="js/three-r46.js"></script>
+</head>
+<body>
+
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+
+        //renderer canvas
+        //antialias:true 抗锯齿
+        var renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(width,height);
+        document.body.appendChild(renderer.domElement);
+        //将背景色设置为黑色
+        renderer.setClearColor(0x000000);
+
+        //create a scene
+        var scene = new THREE.Scene();
+
+
+        //set a camera
+        var viewAngle = 90;
+        var aspect = width / height;
+        var near = 1;
+        var far = 1000;
+        var camera = new THREE.PerspectiveCamera(viewAngle,aspect,near,far);
+        camera.position.z = 500;
+        scene.add(camera);
+
+        //set a directional light
+        var directionalLight = new THREE.DirectionalLight(0xffffff,5);
+        directionalLight.position.z = 3;
+        scene.add(directionalLight);
+
+        //cube geometry (200*200*200)
+        var geometry = new THREE.CubeGeometry(200,200,200);
+        var material =  new THREE.MeshLambertMaterial({color:0x660000});
+        var cubeMesh = new THREE.Mesh(geometry,material);
+        scene.add(cubeMesh);
+
+        renderer.render(scene,camera);
+
+        window.addEventListener('mousemove', function (e) {
+            var mouseX = (e.clientX - width/2);
+            var mouseY = (e.clientY - height/2);
+            cubeMesh.rotation.x = mouseY * 0.005;
+            cubeMesh.rotation.y = mouseX * 0.005;
+
+            renderer.render(scene,camera);
+        },false);
+
+
+    },false);
+</script>
+</body>
+</html>
